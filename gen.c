@@ -12,7 +12,7 @@
 // capacidade da mochila
 #define W 200
 // minimo peso de um item
-#define MIN_W
+#define MIN_W 1
 // total items
 #define T 15
 // maximo valor de um item 

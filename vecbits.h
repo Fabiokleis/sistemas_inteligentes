@@ -10,6 +10,7 @@ typedef struct {
 } VecBits;
 
 VecBits vec_bits(size_t t, size_t w, Item *items);
+VecBits vec_bits_empty(size_t t);
 size_t vec_bits_value(size_t t, VecBits *m, Item *items);
 size_t vec_bits_weight(size_t t, VecBits *m, Item *items);
 void vec_bits_show(size_t t, VecBits *m);
@@ -30,14 +31,7 @@ void vec_bits_show(size_t t, VecBits *m);
 VecBits vec_bits(size_t t, size_t w, Item *items) {
     assert(items != NULL);
 
-    VecBits m = {
-        .total_value = 0,
-        .total_weight = 0,
-        .bits = NULL,
-    };
-    
-    m.bits = malloc(t * sizeof(bool));
-    assert(m.bits != NULL);
+    VecBits m = vec_bits_empty(t);
 
     for (size_t i = 0; i < t; ++i) {
         m.bits[i] = rand() % 2;
@@ -50,6 +44,20 @@ VecBits vec_bits(size_t t, size_t w, Item *items) {
         
         if (m.bits[i] && next_weight > w) m.bits[i] = false;
     }
+    return m;
+}
+
+VecBits vec_bits_empty(size_t t) {
+
+    VecBits m = {
+        .total_value = 0,
+        .total_weight = 0,
+        .bits = NULL,
+    };
+    
+    m.bits = malloc(t * sizeof(bool));
+    assert(m.bits != NULL);
+
     return m;
 }
 
