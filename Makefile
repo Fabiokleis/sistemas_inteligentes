@@ -2,18 +2,27 @@ CC = clang
 CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -Wshadow -Wswitch-enum -g
 LDFLAGS = -lm
 
-all: gen
+all: gen temp
 
-.PHONY: gen
+.PHONY: all
 
-run: gen
+run-gen: gen
 	./gen
 
-main.o: main.c
+run-temp: temp
+	./temp
+
+gen.o: gen.c
 	$(CC) $(CFLAGS) -c $<
 
-gen: main.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o gen main.o
+gen: gen.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o gen gen.o
+
+temp.o: temp.c
+	$(CC) $(CFLAGS) -c $<
+
+temp: temp.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o temp temp.o
 
 clean:
-	rm -f gen *.o
+	rm -f gen temp *.o

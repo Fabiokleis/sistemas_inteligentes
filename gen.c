@@ -26,18 +26,11 @@
 // porcentagem de mutacao
 #define M_P 0.05
 
-typedef unsigned char u8;
+#define ITEM_IMPLEMENATION
+#include "item.h"
 
-typedef struct {
-    u8 value;
-    u8 weight;
-} Item;
-
-typedef struct {
-    size_t total_weight; /* somatorio de pesos */
-    size_t total_value; /* somatorio de valor */
-    bool *bits;
-} VecBits;
+#define VECBITS_IMPLEMENTATION
+#include "vecbits.h"
 
 typedef struct {
     size_t size; /* tamanho da populacao */
@@ -45,99 +38,11 @@ typedef struct {
     VecBits *vecsbits; 
 } Population;
 
-void init_random_items(size_t t, Item *items) {
-    assert(items != NULL);
-
-    for (size_t i = 0; i < t; ++i) {
-        items[i] = (Item){
-            .value = MIN_V + (rand() % (V - MIN_V + 1)),
-            .weight = MIN_W + (rand() % (W - MIN_W + 1)),
-        };
-    }
-}
-
-void items_show(size_t t, Item *items) {
-    assert(items != NULL);
-    printf("itens[%d] { ", t);
-    for (size_t i = 0; i < t; ++i) {
-        printf("(%d, %d) ", items[i].value, items[i].weight);
-    }
-    printf("} W = %d\n", W);
-}
-
-/*
- inicializa uma mochila em um vetor de bits
- t = total de itens
- bits = vetor de bits
-*/
-VecBits vec_bits(size_t t, size_t w, Item *items) {
-    assert(items != NULL);
-
-    VecBits m = {
-        .total_value = 0,
-        .total_weight = 0,
-        .bits = NULL,
-    };
-    
-    m.bits = malloc(t * sizeof(bool));
-    assert(m.bits != NULL);
-
-    for (size_t i = 0; i < t; ++i) {
-        m.bits[i] = rand() % 2;
-        size_t next_weight = m.total_weight + items[i].weight;
-
-        if (m.bits[i] && next_weight < w) {
-            m.total_value = m.total_value + items[i].value;
-            m.total_weight = next_weight;
-        }
-        
-        if (m.bits[i] && next_weight > w) m.bits[i] = false;
-    }
-    return m;
-}
-
-size_t vec_bits_value(size_t t, VecBits *m, Item *items) {
-    assert(m != NULL);
-    assert(items != NULL);
-    
-    size_t total = 0;
-    for (size_t i = 0; i < t; ++i) {
-        if (m->bits[i]) {
-            total += items[i].value;
-        }
-    }
-    return total;
-}
-
-size_t vec_bits_weight(size_t t, VecBits *m, Item *items) {
-    assert(m != NULL);
-    assert(items != NULL);
-    
-    size_t total = 0;
-    for (size_t i = 0; i < t; ++i) {
-        if (m->bits[i]) {
-            total += items[i].weight;
-        }
-    }
-    return total;
-}
-
 
 size_t fitness(size_t w, VecBits *m) {
     assert(m != NULL);
     if (m->total_weight > w) return 0;
     return m->total_value;
-}
-
-void vec_bits_show(size_t t, VecBits *m) {
-    assert(m != NULL);
-    assert(m->bits != NULL);
-    printf("vetor [");
-    
-    for (size_t i = 0; i < t; ++i) {
-        printf("%2d", m->bits[i]);
-    }
-    printf(" ] (valor = %d peso = %d)\n", m->total_value, m->total_weight);
 }
 
 void vec_bits_crossover(size_t t, VecBits *v1, VecBits *v2, VecBits *f1, VecBits *f2) {
@@ -172,6 +77,27 @@ void vec_bits_mutation(size_t t, double mp, VecBits *m) {
         }
     }
 }
+
+void init_random_items(size_t t, Item *items) {
+    assert(items != NULL);
+
+    for (size_t i = 0; i < t; ++i) {
+        items[i] = (Item){
+            .value = MIN_V + (rand() % (V - MIN_V + 1)),
+            .weight = MIN_W + (rand() % (W - MIN_W + 1)),
+        };
+    }
+}
+
+void items_show(size_t t, Item *items) {
+    assert(items != NULL);
+    printf("itens[%d] { ", t);
+    for (size_t i = 0; i < t; ++i) {
+        printf("(%d, %d) ", items[i].value, items[i].weight);
+    }
+    printf("} W = %d\n", W);
+}
+
 
 /*
   cria uma populacao inicial randomica
