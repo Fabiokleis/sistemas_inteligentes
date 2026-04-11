@@ -1,4 +1,4 @@
-CC = clang
+CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -Wshadow -Wswitch-enum -g
 LDFLAGS = -lm
 

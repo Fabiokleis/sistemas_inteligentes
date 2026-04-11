@@ -96,7 +96,7 @@ void neighbor_space_next_state_show(NeighborState *ns) {
         }
     }
     
-    printf(" ] (valor = %d peso = %d)\n", ns->nstates.total_value, ns->nstates.total_weight);
+    printf(" ] (valor = %zu peso = %zu)\n", ns->nstates.total_value, ns->nstates.total_weight);
 }
 
 void neighbor_space_show(Item *items, NeighborState *ns) {
@@ -129,7 +129,7 @@ void neighbor_space_show(Item *items, NeighborState *ns) {
             }
         }
         
-        printf(" ] (valor = %d peso = %d)\n", value, weight);
+        printf(" ] (valor = %zu peso = %zu)\n", value, weight);
         weight = ns->state.total_weight;
         value =  ns->state.total_value;
     }
@@ -153,13 +153,14 @@ void tempering_annelling(size_t t, size_t w, size_t r, size_t max_temperature, I
     neighbor_space_show(items, ns);
 
     size_t tempo = 100;
+
     size_t max_steps = t * tempo;
     
     double temp = max_temperature;
     double alpha = temp / max_steps;
 
     printf("tempera simulada\n");
-    printf("passos totais: %d temperatura inicial: %.2f taxa alpha: %f\n", max_steps, temp, alpha);
+    printf("passos totais: %zu temperatura inicial: %.2f taxa alpha: %f\n", max_steps, temp, alpha);
 
     VecBits best_state = vec_bits_empty(t);
     memcpy(best_state.bits, ns->state.bits, t * sizeof(bool));

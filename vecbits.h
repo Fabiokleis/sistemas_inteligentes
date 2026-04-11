@@ -95,7 +95,7 @@ void vec_bits_show(size_t t, VecBits *m) {
     for (size_t i = 0; i < t; ++i) {
         printf("%2d", m->bits[i]);
     }
-    printf(" ] (valor = %d peso = %d)\n", m->total_value, m->total_weight);
+    printf(" ] (valor = %zu peso = %zu)\n", m->total_value, m->total_weight);
 }
 
 #endif /* VECBITS_IMPLEMENTATION */

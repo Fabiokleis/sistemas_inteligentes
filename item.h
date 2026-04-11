@@ -26,7 +26,7 @@ void init_random_items(size_t t, Item *items) {
 
 void items_show(size_t t, Item *items) {
     assert(items != NULL);
-    printf("itens[%d] { ", t);
+    printf("itens[%zu] { ", t);
     for (size_t i = 0; i < t; ++i) {
         printf("(%d, %d) ", items[i].value, items[i].weight);
     }

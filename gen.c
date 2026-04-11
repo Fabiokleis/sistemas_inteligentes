@@ -91,7 +91,7 @@ void init_random_items(size_t t, Item *items) {
 
 void items_show(size_t t, Item *items) {
     assert(items != NULL);
-    printf("itens[%d] { ", t);
+    printf("itens[%zu] { ", t);
     for (size_t i = 0; i < t; ++i) {
         printf("(%d, %d) ", items[i].value, items[i].weight);
     }
@@ -262,7 +262,7 @@ void population_survivor(size_t w, size_t k, size_t g, size_t n, double mp, Item
     while (gen_counter < g && stagnation_counter < n) {
         gen_counter += 1;
         population_show(pop);
-        printf("geracao: %d nivel de estagnacao: %d\n", gen_counter, stagnation_counter);
+        printf("geracao: %zu nivel de estagnacao: %zu\n", gen_counter, stagnation_counter);
         items_show(pop->vec_size, items);
             
         population_selection(w, k, selections, pop);
