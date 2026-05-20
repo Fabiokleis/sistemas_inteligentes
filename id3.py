@@ -8,8 +8,10 @@ FEATURE_RANGES = {
     'resp':  (0.0, 22.0),
 }
 
-N_FAIXAS  = 7
-N_ARVORES = 50
+N_FAIXAS      = 7
+N_ARVORES     = 50
+SEED          = 42
+RF_SEED       = 1
 
 
 def discretize(value, vmin, vmax, n_faixas):
@@ -151,7 +153,7 @@ def print_tree(node, feature_names=None, depth=0, branch_val=None):
         print_tree(child, feature_names, depth + 1, val)
 
 
-def hold_out(examples, labels, gravities, pct_teste=0.2, seed=42):
+def hold_out(examples, labels, gravities, pct_teste=0.2, seed=SEED):
     import random
     random.seed(seed)
     dados = list(zip(examples, labels, gravities))
@@ -185,7 +187,7 @@ class RandomForest:
     def fit(self, examples, labels, gravities):
         self.trees = []
         for i in range(self.n_arvores):
-            ex_b, lbl_b, grav_b = bootstrap(examples, labels, gravities, seed=i)
+            ex_b, lbl_b, grav_b = bootstrap(examples, labels, gravities, seed=RF_SEED + i)
             self.trees.append(id3(ex_b, lbl_b, grav_b, {0, 1, 2}, self.max_features))
 
     def predict(self, example):
