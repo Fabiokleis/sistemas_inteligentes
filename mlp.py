@@ -95,13 +95,33 @@ class MLP:
         for n in self.oculta:
             n.atualizar(taxa)
 
-    def treinar(self, X, gravidades, epocas=EPOCAS, taxa=TAXA, seed=SEED):
+    def treinar_sgd(self, X, gravidades, epocas=EPOCAS, taxa=TAXA, seed=SEED):
         random.seed(seed)
         ordem = list(range(len(X)))
         for _ in range(epocas):
             random.shuffle(ordem)
             for i in ordem:
                 self.backprop(X[i], gravidades[i], taxa)
+
+    def treinar_batch(self, X, gravidades, epocas=EPOCAS, taxa=TAXA):
+        n = len(X)
+        for _ in range(epocas):
+            grads_saida  = [0.0] * len(self.saida.pesos)
+            grads_oculta = [[0.0] * len(nj.pesos) for nj in self.oculta]
+            for i in range(n):
+                self.forward(X[i])
+                delta_s = self.saida.saida - gravidades[i]
+                for k in range(len(grads_saida)):
+                    grads_saida[k] += delta_s * self.saida.entradas[k]
+                for j, nj in enumerate(self.oculta):
+                    d_j = nj.saida * (1 - nj.saida) * self.saida.pesos[j] * delta_s
+                    for k in range(len(grads_oculta[j])):
+                        grads_oculta[j][k] += d_j * nj.entradas[k]
+            for k in range(len(self.saida.pesos)):
+                self.saida.pesos[k] -= taxa * grads_saida[k] / n
+            for j, nj in enumerate(self.oculta):
+                for k in range(len(nj.pesos)):
+                    nj.pesos[k] -= taxa * grads_oculta[j][k] / n
 
 
 def inferir_centroids(gravidades, labels):
@@ -128,11 +148,10 @@ if __name__ == "__main__":
 
     X, gravidades, labels = load_labeled(LABELED)
     X_tr, g_tr, l_tr, X_te, g_te, l_te = hold_out(X, gravidades, labels)
-
     centroids = inferir_centroids(g_tr, l_tr)
 
     mlp = MLP(h_size=H_SIZE, seed=MLP_SEED)
-    mlp.treinar(X_tr, g_tr, seed=MLP_SEED)
+    mlp.treinar_sgd(X_tr, g_tr, seed=MLP_SEED)
 
     a_tr, r_tr = avalia(mlp, X_tr, g_tr, l_tr, centroids)
     a_te, r_te = avalia(mlp, X_te, g_te, l_te, centroids)
