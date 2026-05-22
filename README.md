@@ -1,6 +1,6 @@
 # sistemas_inteligentes
 
-busca local com tempera simulada e algoritmo genetico.
+trabalho 1: busca local com tempera simulada e algoritmo genetico linguagem C.
 
 ```bash
 make run-gen
@@ -45,4 +45,36 @@ vetor [ 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 ] (valor = 209 peso = 191)
 melhor estado
 vetor [ 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 ] (valor = 209 peso = 191)
 itens[15] { (64, 119) (13, 198) (23, 128) (16, 88) (44, 57) (95, 21) (80, 154) (66, 97) (58, 172) (27, 149) (48, 73) (82, 127) (69, 175) (57, 158) (18, 32) } W = 200
+```
+
+trabalho 2: classificacao e regressao com Random Forest com ID3 e MLP em python.
+
+```bash
+python id3.py
+```
+saida:
+```
+=== ID3 ===
+           Acuracia      RMSE
+Treino       86.67%    4.8808
+Teste        82.33%    5.9471
+
+=== Random Forest (N_ARVORES=50, max_features=2) ===
+           Acuracia      RMSE
+Treino       86.50%    5.0054
+Teste        83.33%    5.7931
+
+(N_FAIXAS=7, N_ARVORES=50)
+```
+
+```bash
+python mlp.py
+```
+saida:
+```
+python mlp.py
+=== MLP (H_SIZE=6, EPOCAS=200, TAXA=0.01) ===
+           Acuracia      RMSE
+Treino       85.67%    4.3098
+Teste        84.33%    4.4455
 ```
